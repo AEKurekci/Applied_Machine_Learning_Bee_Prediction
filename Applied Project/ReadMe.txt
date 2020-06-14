@@ -1,3 +1,0 @@
-Kullanılan Paketler
-librosa
-.

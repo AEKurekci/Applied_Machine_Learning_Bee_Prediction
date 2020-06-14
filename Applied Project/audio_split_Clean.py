@@ -1,32 +1,23 @@
-from builtins import enumerate
-
 from pydub import AudioSegment #for soare the audio file
 from pathlib import Path  #Path lib for looking file in a path
 
 
-def FindFileNamesByPath(path,typeofFile):
-
+def FindFileNamesByPath(path, typeofFile):
     File_List = [path.name for path in Path(path).rglob('*.'+typeofFile)]
     return File_List
 
 
-
 def ReadLabFile(list_of_sound_file_name):
-
     timeList_lab_all = []
     for j in list_of_sound_file_name:
-
         labFile = open("Data\\" + j[:-4] + ".lab", "r")
-
         labFile.readline()
         line = labFile.readline()
         timeList = []
         while line:
-
             line = line.split('	')
             if line[0] == '.\n':
                 break
-
             startTime = float(line.pop(0))
             line.insert(0, startTime)
             finishTime = float(line.pop(1))
@@ -41,17 +32,17 @@ def ReadLabFile(list_of_sound_file_name):
 list_of_sound_file_name = FindFileNamesByPath("Data", "wav")
 split_timeList = ReadLabFile(list_of_sound_file_name)
 
+
 def Clean_Wav_File(timeList):
-    Vaw_obj_list = ["CF003 - Active - Day - (214).wav", "CF003 - Active - Day - (215).wav", "CF003 - Active - Day - (216).wav"]
-    #Vaw_obj_list = list_of_sound_file_name
-    for counter, i in enumerate(Vaw_obj_list):
-
+    for counter, i in enumerate(list_of_sound_file_name):
         newAudio = AudioSegment.from_wav("Data\\" + i)
-
         for num, a in enumerate(timeList[counter]):
             newAu = newAudio[a[0] * 1000:a[1] * 1000]
-            newAu.export("Cleaned Data\\Cleaned_Voice\\" + i + "--" + (a[2])[:-1] + "--" + str(num) + ".wav", format="wav")
-
+            if newAu.duration_seconds > 0:
+                newAu.export("Cleaned Data\\Cleaned_Voice\\" + i + "--" + (a[2])[:-1] + "--" +
+                             str(num) + ".wav", format="wav")
+            else:
+                print("Dirty sound part in ", i, a)
 
 
 Clean_Wav_File(split_timeList)

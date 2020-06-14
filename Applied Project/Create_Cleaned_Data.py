@@ -1,6 +1,5 @@
 import librosa
-import librosa.display
-from librosa import  feature
+from librosa import feature
 import numpy as np
 import pandas as pd
 from pathlib import Path  #Path lib for looking file in a path
@@ -52,7 +51,6 @@ result = FindFileNamesByPath("Cleaned Data\Cleaned_Voice", "wav")
 print(result)
 print(len(result))
 geto = get_Feature_extract(result)
-
 classBeeNoBee = []
 vectors = []
 for i in geto:
